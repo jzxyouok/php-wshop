@@ -10,7 +10,7 @@
 namespace Admin\Controller;
 
 /**
- * 行为控制器
+ * 行为控制
  * @author huajie <banhuajie@163.com>
  */
 class ActionController extends AdminController {
