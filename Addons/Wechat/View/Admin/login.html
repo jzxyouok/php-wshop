@@ -1,0 +1,14 @@
+<if condition="$addons_Wechatconfig.codelogin eq 1 and in_array('admin',$addons_Wechatconfig['codeloginlocation'])">
+<script type="text/javascript">
+		$(function(){
+			$('.login-form').prepend('<div class="codelogin clearfix" id="codelogin" style="display: block;"><a class="codeloginlogo" id="codeloginlogo" href="javascript:void(0)" draggable="false" title="二维码登录"></a></div>').delegate("#codeloginlogo","click",function(){
+					$(".loginbox").animate({top:($("#loginbox").height()+15)*-1},"slow");
+					$("#loginbox").css('visibility','hidden');
+					$("#codeloginBox").css('visibility','inherit');
+					$(".qrlogin_img").click();
+					$(this).attr('class','codeloginlogoqr').hide();
+					$("#itemBox").find("input[name=username]").focus();
+			  });
+		});
+</script>
+</if>

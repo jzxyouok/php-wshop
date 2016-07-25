@@ -1,0 +1,478 @@
+<style type="text/css">
+.icon-remove {
+    background-position-x: -24px;
+}
+</style>
+<php>
+$_addon  =   M('Addons')->where('name="Wechat"')->find();
+if($_addon){
+    $db_config = !empty($_addon['config'])?(array)json_decode($_addon['config'], true):array();
+}
+$w__chars  = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+$w__sukey = substr(str_shuffle($w__chars), 3, 15);
+if(empty($data['config'][group][options][basicsettings][options][url][value]))
+$data['config'][group][options][basicsettings][options][url][value] = U(C("DEFAULT_MODULE")."/Addons/execute@".$_SERVER['HTTP_HOST'], array("_addons"=>"Wechat","_controller"=>"Wechat","_action"=>"index","ukey"=>$w__sukey));
+if(empty($data['config'][group][options][basicsettings][options][ukey][value]))
+$data['config'][group][options][basicsettings][options][ukey][value] = $w__sukey;
+if(empty($data['config'][group][options][basicsettings][options][token][value]))
+$data['config'][group][options][basicsettings][options][token][value] = substr(str_shuffle($w__chars), 3, 30);
+$_addon_class = "Addons\\Wechat\\WechatAddon";
+if(class_exists($_addon_class)){
+	$__class = new $_addon_class;
+	$_saveconfig_cache_list = array();
+	foreach ($__class->saveconfig_cache_list as $_sck => $_scv) {
+		$_saveconfig_cache_list[$_scv] = is_array(S("$_scv"))?json_encode(S("$_scv")):S("$_scv");
+	}
+}
+</php>
+<foreach name="data['config']" item="form" key="o_key">
+				<div class="form-item cf <present name="form.topkey">{$form.topkey}</present> <present name="form.topval"><neq name="data['config'][$form[topkey]]['value']" value="$form[topval]"> hidden</neq></present>"  <present name="form.topval">tval="{$form.topval}"</present> <eq name="form.type" value="hidden"> style="display: none;"</eq>>
+                	<present name="form.title">
+					<label class="item-label">
+						{$form.title|default=''}
+						<present name="form.tip">
+							<span class="check-tips">{$form.tip}</span>
+						</present>
+					</label>
+                    </present>
+						<switch name="form.type">
+							<case value="text">
+							<div class="controls">
+								<input type="text" name="config[{$o_key}]" class="text input-large" value="<if condition="(($form.topkey neq '') AND ($data[config][$form[topkey]][value] eq $form[topval])) OR ( $form.topkey eq '' AND $form.topval eq '')">{$form.value}</if>">
+							</div>
+							</case>
+							<case value="password">
+							<div class="controls">
+								<input type="password" name="config[{$o_key}]" class="text input-large" value="<if condition="(($form.topkey neq '') AND ($data[config][$form[topkey]][value] eq $form[topval])) OR ( $form.topkey eq '' AND $form.topval eq '')">{$form.value}</if>">
+							</div>
+							</case>
+							<case value="hidden">
+								<input type="hidden" name="config[{$o_key}]" value="<if condition="(($form.topkey neq '') AND ($data[config][$form[topkey]][value] eq $form[topval])) OR ( $form.topkey eq '' AND $form.topval eq '')">{$form.value}</if>">
+						  </case>
+							<case value="radio">
+							<div class="controls">
+								<foreach name="form.options" item="opt" key="opt_k">
+									<label class="radio">
+										<input type="radio" name="config[{$o_key}]" value="{$opt_k}" <if condition="(($form.topkey neq '') AND ($data[config][$form[topkey]][value] eq $form[topval])) OR ( $form.topkey eq '' AND $form.topval eq '')"><eq name="form.value" value="$opt_k"> checked</eq></if>>{$opt}
+									</label>
+								</foreach>
+							</div>
+							</case>
+							<case value="checkbox">
+							<div class="controls">
+								<foreach name="form.options" item="opt" key="opt_k">
+									<label class="checkbox">
+										<php>
+											is_null($form["value"]) && $form["value"] = array();
+										</php>
+										<input type="checkbox" name="config[{$o_key}][]" value="{$opt_k}" <if condition="(($form.topkey neq '') AND ($data[config][$form[topkey]][value] eq $form[topval])) OR ( $form.topkey eq '' AND $form.topval eq '')"><in name="opt_k" value="$form.value"> checked</in></if>>{$opt}
+									</label>
+								</foreach>
+							</div>
+							</case>
+							<case value="select">
+							<div class="controls">
+								<select name="config[{$o_key}]">
+									<foreach name="form.options" item="opt" key="opt_k">
+										<option value="{$opt_k}" <if condition="(($form.topkey neq '') AND ($data[config][$form[topkey]][value] eq $form[topval])) OR ( $form.topkey eq '' AND $form.topval eq '')"><eq name="form.value" value="$opt_k"> selected</eq></if>>{$opt}</option>
+									</foreach>
+								</select>
+							</div>
+							</case>
+                            <case value="span">
+								<b><a href="{$form.value}" target="_blank">{$form.value}</a></b>
+                                <input type="hidden" name="config[{$o_key}]" value="<if condition="(($form.topkey neq '') AND ($data[config][$form[topkey]][value] eq $form[topval])) OR ( $form.topkey eq '' AND $form.topval eq '')">{$form.value}</if>">
+							</case>
+							<case value="textarea">
+							<div class="controls">
+								<label class="textarea input-large">
+									<textarea name="config[{$o_key}]"><if condition="(($form.topkey neq '') AND ($data[config][$form[topkey]][value] eq $form[topval])) OR ( $form.topkey eq '' AND $form.topval eq '')">{$form.value}</if></textarea>
+								</label>
+							</div>
+							</case>
+							<case value="picture_union">
+								<div class="controls">
+								<input type="file" id="upload_picture_{$o_key}">
+								<input type="hidden" name="config[{$o_key}]" id="cover_id_{$o_key}" value="<if condition="(($form.topkey neq '') AND ($data[config][$form[topkey]][value] eq $form[topval])) OR ( $form.topkey eq '' AND $form.topval eq '')">{$form.value}</if>"/>
+								<div class="upload-img-box">
+									<notempty name="form['value']">
+									<php> $mulimages = explode(",", $form["value"]); </php>
+									<foreach name="mulimages" item="one">
+										<div class="upload-pre-item" val="{$one}">
+											<img src="{$one|get_cover='path'}"  ondblclick="removePicture{$o_key}(this)"/>
+										</div>
+									</foreach>
+									</notempty>
+								</div>
+								</div>
+								<script type="text/javascript">
+									//上传图片
+									/* 初始化上传插件 */
+									$("#upload_picture_{$o_key}").uploadify({
+										"height"          : 30,
+										"swf"             : "__STATIC__/uploadify/uploadify.swf",
+										"fileObjName"     : "download",
+										"buttonText"      : "上传图片",
+										"uploader"        : "{:U('File/uploadPicture',array('session_id'=>session_id()))}",
+										"width"           : 120,
+										'removeTimeout'   : 1,
+										'fileTypeExts'    : '*.jpg; *.png; *.gif;',
+										"onUploadSuccess" : uploadPicture{$o_key},
+										'onFallback' : function() {
+								            alert('未检测到兼容版本的Flash.');
+								        }
+									});
+
+									function uploadPicture{$o_key}(file, data){
+										var data = $.parseJSON(data);
+										var src = '';
+										if(data.status){
+											src = data.url || '__ROOT__' + data.path
+											$("#cover_id_{$o_key}").parent().find('.upload-img-box').append(
+												'<div class="upload-pre-item" val="' + data.id + '"><img src="__ROOT__' + src + '" ondblclick="removePicture{$o_key}(this)"/></div>'
+											);
+											setPictureIds{$o_key}();
+										} else {
+											updateAlert(data.info);
+											setTimeout(function(){
+												$('#top-alert').find('button').click();
+												$(that).removeClass('disabled').prop('disabled',false);
+											},1500);
+										}
+									}
+									function removePicture{$o_key}(o){
+										var p = $(o).parent().parent();
+										$(o).parent().remove();
+										setPictureIds{$o_key}();
+									}
+									function setPictureIds{$o_key}(){
+										var ids = [];
+										$("#cover_id_{$o_key}").parent().find('.upload-img-box').find('.upload-pre-item').each(function(){
+											ids.push($(this).attr('val'));
+										});
+										if(ids.length > 0)
+											$("#cover_id_{$o_key}").val(ids.join(','));
+										else
+											$("#cover_id_{$o_key}").val('');
+									}
+								</script>
+							</case>
+							<case value="group">
+								<ul class="tab-nav nav">
+									<volist name="form.options" id="li">
+										<li data-tab="tab{$i}" <eq name="i" value="1">class="current"</eq>><a href="javascript:void(0);">{$li.title}</a></li>
+									</volist>
+								</ul>
+								<div class="tab-content">
+								<volist name="form.options" id="tab">
+									<div id="tab{$i}" class="tab-pane <eq name="i" value="1">in</eq> tab{$i}">
+                                    <present name="tab['tip']">
+                                        <div class="alert block alert-success">
+                                            <div class="alert-content" style="max-width:inherit;">{$tab['tip']}</div>
+                                        </div>
+                                    </present>
+										<foreach name="tab['options']" item="tab_form" key="o_tab_key">
+                                        <div class="form-item cf <present name="tab_form.topkey">{$tab_form.topkey}</present> <present name="tab_form.topval"><neq name="data['config'][$o_key][options][$key][options][$tab_form[topkey]][value]" value="$tab_form[topval]"> hidden</neq></present>"  <present name="tab_form.topval">tval="{$tab_form.topval}"</present> <eq name="tab_form.type" value="hidden"> style="display: none;"</eq>>
+										<label class="item-label">
+											{$tab_form.title|default=''}
+											<present name="tab_form.tip">
+												<span class="check-tips">{$tab_form.tip}</span>
+											</present>
+										</label>
+										<div class="controls">
+											<switch name="tab_form.type">
+												<case value="text">
+													<input type="text" name="config[{$o_tab_key}]" class="text input-large" value="{$tab_form.value}">
+												</case>
+												<case value="password">
+													<input type="password" name="config[{$o_tab_key}]" class="text input-large" value="{$tab_form.value}">
+												</case>
+												<case value="hidden">
+													<input type="hidden" name="config[{$o_tab_key}]" value="{$tab_form.value}">
+												</case>
+												<case value="radio">
+													<foreach name="tab_form.options" item="opt" key="opt_k">
+														<label class="radio">
+															<input type="radio" name="config[{$o_tab_key}]" value="{$opt_k}" <eq name="tab_form.value" value="$opt_k"> checked</eq>>{$opt}
+														</label>
+													</foreach>
+												</case>
+												<case value="checkbox">
+													<foreach name="tab_form.options" item="opt" key="opt_k">
+														<label class="checkbox">
+															<php> is_null($tab_form["value"]) && $tab_form["value"] = array();</php>
+															<input type="checkbox" name="config[{$o_tab_key}][]" value="{$opt_k}" <in name="opt_k" value="$tab_form.value"> checked</in>>{$opt}
+														</label>
+													</foreach>
+												</case>
+												<case value="select">
+													<select name="config[{$o_tab_key}]">
+														<foreach name="tab_form.options" item="opt" key="opt_k">
+															<option value="{$opt_k}" <eq name="tab_form.value" value="$opt_k"> selected</eq>>{$opt}</option>
+														</foreach>
+													</select>
+												</case>
+												<case value="textarea">
+													<label class="textarea input-large">
+														<textarea name="config[{$o_tab_key}]">{$tab_form.value}</textarea>
+													</label>
+												</case>
+												<case value="picture_union">
+													<div class="controls">
+													<input type="file" id="upload_picture_{$o_tab_key}">
+													<input type="hidden" name="config[{$o_tab_key}]" id="cover_id_{$o_tab_key}" value="{$tab_form.value}"/>
+													<div class="upload-img-box">
+														<notempty name="tab_form['value']">
+														<php> $mulimages = explode(",", $tab_form["value"]); </php>
+														<foreach name="mulimages" item="one">
+															<div class="upload-pre-item" val="{$one}">
+																<img src="{$one|get_cover='path'}"  ondblclick="removePicture{$o_tab_key}(this)"/>
+															</div>
+														</foreach>
+														</notempty>
+													</div>
+													</div>
+													<script type="text/javascript">
+														//上传图片
+														/* 初始化上传插件 */
+														$("#upload_picture_{$o_tab_key}").uploadify({
+															"height"          : 30,
+															"swf"             : "__STATIC__/uploadify/uploadify.swf",
+															"fileObjName"     : "download",
+															"buttonText"      : "上传图片",
+															"uploader"        : "{:U('File/uploadPicture',array('session_id'=>session_id()))}",
+															"width"           : 120,
+															'removeTimeout'   : 1,
+															'fileTypeExts'    : '*.jpg; *.png; *.gif;',
+															"onUploadSuccess" : uploadPicture{$o_tab_key},
+															'onFallback' : function() {
+													            alert('未检测到兼容版本的Flash.');
+													        }
+														});
+
+														function uploadPicture{$o_tab_key}(file, data){
+															var data = $.parseJSON(data);
+															var src = '';
+															if(data.status){
+																src = data.url || '__ROOT__' + data.path
+																$("#cover_id_{$o_tab_key}").parent().find('.upload-img-box').append(
+																	'<div class="upload-pre-item" val="' + data.id + '"><img src="__ROOT__' + src + '" ondblclick="removePicture{$o_tab_key}(this)"/></div>'
+																);
+																setPictureIds{$o_tab_key}();
+															} else {
+																updateAlert(data.info);
+																setTimeout(function(){
+																	$('#top-alert').find('button').click();
+																	$(that).removeClass('disabled').prop('disabled',false);
+																},1500);
+															}
+														}
+														function removePicture{$o_tab_key}(o){
+															var p = $(o).parent().parent();
+															$(o).parent().remove();
+															setPictureIds{$o_tab_key}();
+														}
+														function setPictureIds{$o_tab_key}(){
+															var ids = [];
+															$("#cover_id_{$o_tab_key}").parent().find('.upload-img-box').find('.upload-pre-item').each(function(){
+																ids.push($(this).attr('val'));
+															});
+															if(ids.length > 0)
+																$("#cover_id_{$o_tab_key}").val(ids.join(','));
+															else
+																$("#cover_id_{$o_tab_key}").val('');
+														}
+													</script>
+												</case>
+                                                <case value="optiongroup">
+                                                    <foreach name="tab_form.options" item="opts" key="opts_k">
+                                                        <switch name="opts.type">
+                                                            <case value="select">
+                                                            <label>{$opts.title}：
+                                                                    <select name="config[{$key}][{$o_tab_key}][{$opts_k}]">
+                                                                        <foreach name="opts.options" item="opts_o" key="opts_o_k">
+                                                                            <option value="{$opts_o_k}" <if condition="($opts.value eq $opts_o_k) OR ($db_config[$key][$o_tab_key][$opts_k] eq $opts_o_k) "> selected</if>>{$opts_o}</option>
+                                                                        </foreach>
+                                                                    </select>
+                                                            </label>
+                                                            </case>
+                                                            <case value="text">
+                                                            <label>{$opts.title}：
+                                                                    <input type="text" name="config[{$key}][{$o_tab_key}][{$opts_k}]" class="text input-large" value="<empty name="db_config[$key][$o_tab_key][$opts_k]">{$opts.value}<else />{$db_config[$key][$o_tab_key][$opts_k]}</empty>">
+                                                            </label>
+                                                                    
+                                                            </case>
+                                                        </switch>
+                                                    </foreach>
+												</case>
+                                                <case value="dynamicgroup">
+                                                <php>$_key = $key;
+                                                if(is_array($db_config[$_key][$o_tab_key])){
+                                                	$tabformoptions = $db_config[$_key][$o_tab_key];
+                                                    foreach ($tabformoptions as $_ok => $_ov) {
+                                                    	$tab_form_options[$_ok] = $tab_form[options][0];
+                                                        foreach ($_ov[sub_button] as $__ok => $__ov) {
+                                                            $tab_form_options[$_ok][sub_button][$__ok] = $tab_form[options][0][sub_button][0];
+                                                        }
+                                                    }
+                                                }else{
+                                                	$tab_form_options = $tab_form[options] ;
+                                                }
+                                                </php>
+                                                    <volist name="tab_form_options" id="opts" key="opts_k">
+                                                    <div class="controls">
+                                                      <switch name="opts.type">
+                                                          <case value="text">
+                                                           <label>{$opts.title}：<input name="config[{$_key}][{$o_tab_key}][{$opts_k - 1}][{$opts.name}]" type="text" class="text input-large" <present name="opts.maxlength"> maxlength="{$opts.maxlength}"</present> style="<present name="opts.width">width:{$opts.width};</present>" value="<empty name="db_config[$_key][$o_tab_key][$opts_k - 1][$opts[name]]">{$opts.value}<else />{$db_config[$_key][$o_tab_key][$opts_k - 1][$opts[name]]}</empty>">
+                                                            </label>
+                                                            <span class="check-tips">
+                                                            <if condition="$opts_k eq 1">
+                                                            <a class="add-button" title="添加一级菜单" href="javascript:;"><i class="icon-add"></i></a>
+                                                            <else />
+                                                            <a class="remove-button" title="删除一级菜单" href="javascript:;"><i class="icon-add icon-remove"></i></a>
+                                                            </if></span>
+                                                          <present name="opts.sub_button">
+                                                          <volist name="opts.sub_button" id="optst" key="optstk">
+                                                          <div class="children">
+                                                          <span style="background-image: url(__ROOT__/Public/Admin/images/tab_sign.png); background-position: -55px 0;  width: 55px; height: 21px; display: inline-block; margin-left: 15px; vertical-align: middle;"></span>
+                                                          <if condition="$optstk eq 1">
+                                                          <a class="add-sub-cate" title="添加二级菜单" href="javascript:;">
+                                                                <i class="icon-add"></i>
+                                                            </a>
+                                                          <else />
+                                                          <a class="remove-sub-cate" title="删除二级菜单" href="javascript:;">
+                                                                <i class="icon-add icon-remove"></i>
+                                                            </a>
+                                                          </if>
+                                                          <volist name="optst" id="opts_c" key="opts_ck">
+                                                          <switch name="opts_c.type">
+                                                          <case value="select"><label>{$opts_c.title}：
+                                                                    <select name="config[{$_key}][{$o_tab_key}][{$opts_k - 1}][sub_button][{$optstk - 1}][{$key}]">
+                                                                        <foreach name="opts_c.options" item="opts_co" key="opts_co_k">
+                                                                            <option value="{$opts_co_k}" <if condition="($opts_c.value eq $opts_co_k) OR ($db_config[$_key][$o_tab_key][$opts_k - 1][sub_button][$optstk - 1][$key] eq $opts_co_k) "> selected</if>>{$opts_co}</option>
+                                                                        </foreach>
+                                                                    </select></label>
+                                                          </case>
+                                                          <case value="text"><label>{$opts_c.title}：
+                                                                    <input type="text" name="config[{$_key}][{$o_tab_key}][{$opts_k - 1}][sub_button][{$optstk - 1}][{$key}]" class="text input-large"<present name="opts_c.maxlength"> maxlength="{$opts_c.maxlength}"</present> style="<present name="opts_c.width">width:{$opts_c.width};</present>" value="<empty name="db_config[$_key][$o_tab_key][$opts_k - 1][sub_button][$optstk - 1][$key]">{$opts_c.value}<else />{$db_config[$_key][$o_tab_key][$opts_k - 1][sub_button][$optstk - 1][$key]}</empty>"></label>
+                                                          </case>
+                                                          
+                                                          </switch>
+                                                          
+                                                          </volist>
+                                                          </div>
+                                                          </volist>
+                                                          </present>
+                                                          </case>
+                                                        </switch>
+                                                    </div>
+                                                    </volist>
+												</case>
+												</switch>
+											</div>
+                                        </div>
+										</foreach>
+								<!-- <present name="tab.type">
+								<switch name="tab.type">
+									<case value="cachehtml">
+													<div class="data-table table-striped">
+												        <form class="ids">
+												            <table>
+												                <thead>
+												                    <tr>
+												                        <th width="30%">缓存名称</th>
+												                        <th width="60%">缓存内容</th>
+												                        <th width="10%">操作</th>
+												                    </tr>
+												                </thead>
+												                <tbody>
+												                    <notempty name="_saveconfig_cache_list">
+												                        <volist name="_saveconfig_cache_list" id="_scv">
+												                            <tr>
+												                                <td>{$key}</td>
+												                                <td style="word-break:break-all;">{$_scv}</td>
+												                                <td>
+												                                    <a class="confirm ajax-get" title="清除" href="{:U('delcache?id='.$_sck)}">清除</a>
+												                                </td>
+												                            </tr>
+												                        </volist>
+												                        <else/>
+												                        <td colspan="10" class="text-center">aOh! 暂时还没有内容!</td>
+												                    </notempty>
+												                </tbody>
+												            </table>
+												        </form>
+												    </div>
+									</case>
+								</switch>
+			                    </present> -->
+								  </div>
+								</volist>
+								</div>
+							</case>
+						</switch>
+
+					</div>
+</foreach>
+<script type="text/javascript" charset="utf-8">
+		$(function(){
+			$('button[type="submit"].submit-btn.ajax-post').click(function(){
+				//清空缓存
+				$.get("{:addons_url('Wechat://Wechatclass/update_cache')}");
+		  		return false;
+			});
+		});
+		function bindShow(radio_bind, selectors){
+			$(radio_bind).click(function(){
+				if($(this).val() == $(selectors).attr("tval")){
+					$(selectors).removeClass('hidden');
+				}else{
+					$(selectors).addClass('hidden');
+				}
+			})
+		}
+		$(document).delegate('.add-button',"click",function(){
+			var c = '.controls',cn = '.children';
+			var t = $(this).parents(c).html();
+			var l = $(this).parents(c).parent(c).find(c).length;
+			var a = $(this).parents(c).find(cn).first().html();
+			console.log(a);
+			var s = parseInt($(this).parents(c).parent(c).find(c).last().html().match(/\[button\]\[(\d+)\]/i)[1]);
+			
+			
+			s = (s<1)?0:s;
+			t = t.replace(/(<a[\s\S]+?)(add-button)([\s\S]+?)(添加一级菜单)([\s\S]+?)(icon-add)([\s\S]+?<\/a>)/i, "$1remove-button$3删除一级菜单$5$6 icon-remove$7");
+			t = t.replace(/(<div[\s\S]+?class="children")([\s\S]+?)(<\/div>)/g, '');
+			t = t+'<div class="children">'+a+'</div>';
+			t = t.replace(/(\[button\]\[)(\d+)(\])/g, "$1"+parseInt(parseInt(s) + 1).toString()+"$3");
+			t = t.replace(/(\[sub_button\]\[)(\d+)(\])/g, "$1"+(0).toString()+"$3");
+			t = t.replace(/(<input)(.*?)(value=")(.*?)("([^>]*?)>)/g, "$1$2$3$5");
+			if(l < 3){
+				$($(this).parents(c).parent(c)).append('<div class="controls">'+t+'</div>');
+			}
+			return false;
+		})
+		$(document).delegate('.add-sub-cate',"click",function(){
+			var c = '.controls',cn = '.children';
+			var t = $(this).parent(cn).html();
+			var l = $(this).parent(cn).parent(c).find(cn).length;
+			var s = parseInt($(this).parent(cn).parent(c).find(cn).last().html().match(/sub_button\]\[(\d+)\]/i)[1]);
+			s = (s<1)?0:s;
+			t = t.replace(/(<a[\s\S]+?)(add-sub-cate)([\s\S]+?)(添加二级菜单)([\s\S]+?)(icon-add)([\s\S]+?<\/a>)/i, "$1remove-sub-cate$3删除二级菜单$5$6 icon-remove$7");
+			t = t.replace(/(<input)(.*?)(value=")(.*?)("([^>]*?)>)/g, "$1$2$3$5");
+			t = t.replace(/(sub_button\]\[)(\d+)(\])/g, "$1"+parseInt(parseInt(s) + 1).toString()+"$3");
+			if(l < 5){
+			$($(this).parent(cn).parent(c)).append('<div class="children">'+t+'</div>');
+			}
+			return false;
+		})
+		$(document).delegate(".remove-sub-cate","click",function(){
+		  	$(this).parent('.children').remove();
+		});
+		$(document).delegate(".remove-button","click",function(){
+		  	$(this).parent('.check-tips').parent('.controls').remove();
+		});
+		
+		//配置的动态
+		bindShow('[name="config[codelogin]"]','.codelogin');
+</script>

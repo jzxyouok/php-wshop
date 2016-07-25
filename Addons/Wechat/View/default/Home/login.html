@@ -1,0 +1,55 @@
+<style type="text/css">
+.codelogin {
+position: relative;
+left: 400px;
+float: left;
+top: 0;
+z-index: 100;
+}
+.codeloginlogo {
+position: absolute;
+right: -1px;
+width: 50px;
+height: 46px;
+background: url(Public/Admin/images/pull_3.png) no-repeat;
+outline: none;
+}
+.codeloginlogoqr {
+position: absolute;
+right: -1px;
+width: 50px;
+height: 46px;
+background:none;
+outline: none;
+}
+#codeloginBox .qr_tips {
+	margin-bottom:10px;
+}
+#codeloginBox .qrlogin_bg {
+width: 150px;
+height: 96px;
+margin-left:10px;
+float:left;
+background: url(Public/Admin/images/pr.png) no-repeat 0 0;
+_background: none;
+_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/qr_1_ie6.png',sizingMethod="crop");
+margin-top:30px;
+}
+#codeloginBox .qrlogin_img{
+	float:left;
+}
+</style>
+<if condition="$addons_Wechatconfig.codelogin eq 1 and in_array('index',$addons_Wechatconfig['codeloginlocation'])">
+<script type="text/javascript">
+		$(function(){
+			$('.login-form').prepend('<div class="codelogin clearfix" id="codelogin" style="display: block;"><a class="codeloginlogo" id="codeloginlogo" href="javascript:void(0)" draggable="false" title="二维码登录"></a></div>').delegate("#codeloginlogo","click",function(){
+					$(".loginbox").animate({top:($("#loginbox").height()+15)*-1},"slow");
+					$("#loginbox").css('visibility','hidden');
+					$("#codeloginBox").css('visibility','inherit');
+					$(".qrlogin_img").click();
+					$(this).attr('class','codeloginlogoqr').hide();
+					$("#itemBox").find("input[name=username]").focus();
+			  });
+		});
+</script>
+</if>
