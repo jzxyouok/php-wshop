@@ -18,7 +18,6 @@ return array(
     'URL_MODEL' => 3, //URL模式
 
 
-    //
     /* 文件上传相关配置 */
     'DOWNLOAD_UPLOAD' => array(
         'mimes' => '', //允许上传的文件MiMe类型

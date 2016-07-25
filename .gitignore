@@ -1,1 +1,9 @@
 # Created by .ignore support plugin (hsz.mobi)
+.idea/composerJson.xml
+.idea/copyright/
+.idea/enter_web.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/sqldialects.xml
+.idea/workspace.xml
+Runtime/
